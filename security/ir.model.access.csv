@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+RealEstateX.access_tenants_complaints,access_tenants_complaints,RealEstateX.model_tenants_complaints,base.group_user,1,1,1,1
+RealEstateX.access_complaint_type,access_complaint_type,RealEstateX.model_complaint_type,base.group_user,1,1,1,1
+RealEstateX.access_question_complaint_answer,access_question_complaint_answer,RealEstateX.model_question_complaint_answer,base.group_user,1,1,1,1
+RealEstateX.access_drop_complaint,access_drop_complaint,RealEstateX.model_drop_complaint,base.group_user,1,1,1,1

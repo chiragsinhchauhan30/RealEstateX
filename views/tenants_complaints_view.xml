@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Tenants Complaint Tree-->
+        <record id="view_tenants_complaint_tree" model="ir.ui.view">
+            <field name="name">tenants.complaint.tree</field>
+            <field name="model">tenants.complaints</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="complaint_number"/>
+                    <field name="name"/>
+                    <field name="email"/>
+                    <field name="address"/>
+                    <field name="type"/>
+                    <field name="description"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Tenants Complaint Form-->
+        <record id="view_tenants_complaint_form" model="ir.ui.view">
+            <field name="name">tenants.complaint.form</field>
+            <field name="model">tenants.complaints</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <field name="state" widget="statusbar" statusbar_visible="new,review,progress,solved,dropped"/>
+                        <button name="%(RealEstateX.drop_complaint_action)d"
+                                invisible="state in ('solved', 'dropped')" type="action"
+                                string="Drop Complaint"/>
+                        <button name="action_set_to_draft"
+                                invisible="state != 'dropped'" type="object"
+                                string="Set To Draft"/>
+                        <button name="action_classify_complaint"
+                                invisible="state != 'new' or type_name in ('Question', 'question')" type="object"
+                                string="Classify Complaint"/>
+                        <button name="action_action_plan"
+                                invisible="state != 'review' or type_name in ('Question', 'question')" type="object"
+                                string="Classify With Action Plan"/>
+                        <button name="action_resolve_complaint"
+                                invisible="state != 'progress' or type_name in ('Question', 'question')" type="object"
+                                string="Resolve"/>
+                        <button name="%(RealEstateX.question_complaint_answer_actions)d"
+                                invisible="type_name not in ('Question', 'question') or state != 'new'"
+                                type="action"
+                                string="Answer Complaint"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="complaint_number" options="{'line_breaks': False}" widget="text"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="type_name" invisible="1"/>
+                                <field name="name" readonly="state in ('solved', 'dropped')"/>
+                                <field name="address" readonly="state in ('solved', 'dropped')"/>
+                                <field name="priority" widget="priority"/>
+                                <field name="type" readonly="state in ('solved', 'dropped')"/>
+                            </group>
+                            <group>
+                                <field name="email" readonly="state in ('solved', 'dropped')"/>
+                                <field name="user_id" readonly="state in ('solved', 'dropped')"/>
+                                <field name="description" readonly="state in ('solved', 'dropped')"/>
+                            </group>
+                        </group>
+                        <notebook string="Action Plan">
+                            <page name="Action Plan">
+                                <group>
+                                    <field name="action_plan" readonly="state in ('solved', 'dropped')"
+                                           required="state == 'progress'"/>
+                                </group>
+                            </page>
+                            <page name="Resolve Details">
+                                <group>
+                                    <field name="resolve_date" readonly="1"/>
+                                    <field name="resolve_reason" readonly="1"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Tenants Complaint Action-->
+        <record model="ir.actions.act_window" id="tenants_complaint_view_action">
+            <field name="name">Tenants Complaints</field>
+            <field name="res_model">tenants.complaints</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_tenants_complaint_tree"/>
+            <field name="target">current</field>
+        </record>
+
+        <!-- Tenants Complaint Menu-->
+        <menuitem
+                id="tenants_complaint_root_menu"
+                name="Tenants Complaints"
+                sequence="1"/>
+
+        <menuitem
+                id="complaint_root_menu"
+                parent="tenants_complaint_root_menu"
+                name="Complaints"
+                sequence="1"/>
+
+        <menuitem
+                id="tenant_complaint_menu"
+                name="Tenants Complaint"
+                parent="complaint_root_menu"
+                action="tenants_complaint_view_action"
+                sequence="1"/>
+
+    </data>
+</odoo>

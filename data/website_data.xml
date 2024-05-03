@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- Tenant Complaint Register Form Template  -->
+    <template id="RealEstateX.tenant_complaint" name="Tenant Complaint">
+        <t t-call="website.layout">
+            <t t-set="logged_partner" t-value="request.env['website.visitor']._get_visitor_from_request().partner_id"/>
+            <div id="wrap" class="oe_structure oe_empty">
+                <style>
+                    body {
+                    background-color: #f8f9fa;
+                    }
+                    .complaint-form {
+                    margin: 0 auto;
+                    background-color: #fff;
+                    padding: 30px;
+                    border-radius: 10px;
+                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                    }
+                    .complaint-form h2 {
+                    text-align: center;
+                    margin-bottom: 20px;
+                    }
+                    .complaint-form .form-group {
+                    margin-bottom: 20px;
+                    }
+                    .complaint-form label {
+                    font-weight: 600;
+                    }
+                    .complaint-form textarea {
+                    resize: none;
+                    }
+                    .complaint-form button {
+                    width: 100%;
+                    }
+                </style>
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8 mt-5 mb-5">
+                            <div class="complaint-form">
+                                <t t-esc="complaint_type"/>
+                                <h2>Register Tenant Complaint</h2>
+                                <form id="complaintForm" action="/website/complaint" method="post"
+                                      data-success-mode="redirect" data-success-page="/complaint-thank-you">
+                                    <div class="form-group mt-2">
+                                        <label for="tenant1">Tenant Name</label>
+                                        <input type="char" class="form-control s_website_form_input"
+                                               data-fill-with="name" id="tenant1" required=""
+                                               placeholder="Tenant Name" name="tenant_name"/>
+                                    </div>
+                                    <div class="form-group mt-2">
+                                        <label for="tenant2">Email</label>
+                                        <input type="email" class="form-control" required="" id="tenant2"
+                                               placeholder="Email" name="email"/>
+                                    </div>
+                                    <div class="form-group mt-2">
+                                        <label for="tenant3">Address</label>
+                                        <input type="char" class="form-control" required="" id="tenant3"
+                                               placeholder="Address" name="address"/>
+                                    </div>
+
+                                    <div class="form-group mt-2">
+                                        <label for="tenant4">Type</label>
+                                        <select id="complaint-type-select" class="form-select" name="type_id"
+                                                required="">
+                                            <option t-att-value=""/>
+                                            <t t-foreach="complaint_type_ids" t-as="type">
+                                                <option t-att-value="type.id" t-out="type.name"/>
+                                            </t>
+                                        </select>
+                                    </div>
+                                    <div class="form-group mt-2">
+                                        <label for="tenant5">Description</label>
+                                        <textarea type="char" class="form-control" required="" row="5" id="tenant5"
+                                                  placeholder="Problem Description" name="description"/>
+                                    </div>
+                                    <button type="submit" value="submit" class="btn btn-primary">Submit Complaint
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Complaint Thank You, Page  -->
+    <record id="RealEstateX.complaint_thanks" model="website.page">
+        <field name="name">Thanks (Complaint Thanks)</field>
+        <field name="type">qweb</field>
+        <field name="url">/complaint-thank-you</field>
+        <field name="website_indexed" eval="False"/>
+        <field name="is_published">True</field>
+        <field name="key">RealEstateX.complaint_thanks</field>
+        <field name="arch" type="xml">
+            <t name="Thanks (Complaint Thanks)" t-name="RealEstateX.complaint_thanks">
+                <t t-call="website.layout">
+                    <div id="wrap" class="oe_structure oe_empty">
+                        <section class="s_text_block pt40 pb40 o_colored_level " data-snippet="s_text_block">
+                            <div class="container s_allow_columns">
+                                <div class="row">
+                                    <div class="col-lg-12 col-xl-12 me-lg-auto">
+                                        <span class="d-block fa fa-4x fa-thumbs-up mx-auto rounded-circle bg-primary"/>
+                                        <br/>
+                                        <h1 class="text-center">Thank You!</h1>
+                                        <h2 class="text-center">Your Complaint Number is
+                                            <t t-esc="number"/>
+                                        </h2>
+                                        <div class="pb16 pt16 s_hr" data-snippet="s_hr" data-name="Separator">
+                                            <hr class="mx-auto border-top w-50 border-dark text-center"/>
+                                        </div>
+                                        <h5 class="text-center">
+                                            <span class="fa fa-check-circle"/>
+                                            <span>Thank You for submitting your issue, our team will get right on it !
+                                            </span>
+                                        </h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </t>
+            </t>
+        </field>
+    </record>
+
+    <!-- Complaint Web Page -->
+    <record id="tenant_complaint_page" model="website.page">
+        <field name="url">/tetant</field>
+        <field name="is_published">True</field>
+        <field name="view_id" ref="tenant_complaint"/>
+        <field name="track">True</field>
+        <field name="website_meta_description">This is the Complaint page of the website</field>
+    </record>
+
+    <!-- Complaint Website Menu -->
+    <record id="menu_tenant_complaint" model="website.menu">
+        <field name="name">Tenant Complaint</field>
+        <field name="page_id" ref="tenant_complaint_page"/>
+        <field name="parent_id" ref="website.main_menu"/>
+        <field name="sequence" type="int">50</field>
+    </record>
+
+</odoo>

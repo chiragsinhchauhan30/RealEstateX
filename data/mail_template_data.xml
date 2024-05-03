@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!-- Tenant Complaint Received Format -->
+        <record id="new_tenant_complaint_request_email_template" model="mail.template">
+            <field name="name">Tenant: Complaint Received</field>
+            <field name="model_id" ref="RealEstateX.model_tenants_complaints"/>
+            <field name="subject">{{ object.name }}</field>
+            <field name="email_from">{{ (object.team_id.alias_email_from or object.company_id.email_formatted or
+                object.user_id.email_formatted or user.email_formatted) }}
+            </field>
+            <field name="email_to">{{ (object.email) }}
+            </field>
+            <field name="description">Send customers a confirmation email to notify them that their tenant ticket has
+                been received and is currently being reviewed by the team. Automatically send an email to
+                customers when a ticket reaches a specific stage in a complaint team by setting this template on that
+                stage.
+            </field>
+            <field name="body_html" type="html">
+                <div>
+                    Dear <t t-out="object.name or object.sudo().name or 'Madam/Sir'">
+                    Madam/Sir</t>,
+                    <br/>
+                    <br/>
+                    Thank you for bringing these concerns to my attention. I understand the importance of addressing
+                    them promptly to ensure a comfortable living environment for all tenants.
+                    <br/>
+                    <br/>
+                    Your request of
+                    <t t-out="object.type.name or object.sudo().type.name"/>
+                    has been received and is being reviewed by our <t t-out="object.user_id.name">Support</t> team.
+                    <br/>
+                    <br/>
+                    The reference for your ticket is
+                    <strong>
+                        <t t-out="object.complaint_number or ''">TC000001</t>
+                    </strong>
+                    ,I assure you that required steps will be taken for
+                    <t t-out="object.type.name or object.sudo().type.name"/>
+                    problem asap.
+                    <br/>
+                    <br/>
+                    To provide any additional information, simply reply to this email
+                    <br/>
+                    <br/>
+                    Thank you for your prompt action.
+                    <br/>
+                    <br/>
+                    Best regards,
+                    <t t-out="object.user_id.name or object.sudo().user_id.name"><br/>Tenant Complaint
+                    </t>
+                    Team
+                </div>
+            </field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+
+        <!-- Tenant Complaint Solved Format -->
+        <record id="solved_tenant_complaint_email_template" model="mail.template">
+            <field name="name">Tenant: Complaint Solved</field>
+            <field name="model_id" ref="RealEstateX.model_tenants_complaints"/>
+            <field name="subject">{{ object.name }}</field>
+            <field name="email_from">{{ (object.team_id.alias_email_from or object.company_id.email_formatted or
+                object.user_id.email_formatted or user.email_formatted) }}
+            </field>
+            <field name="email_to">{{ (object.email) }}</field>
+            <field name="description">Send customers a email to notify them that their tenant ticket has
+                been solved.
+            </field>
+            <field name="body_html" type="html">
+                <div>
+                    Dear <t t-out="object.name or object.sudo().name or 'Madam/Sir'">
+                    Madam/Sir</t>,
+                    <br/>
+                    <br/>
+                    your recent complaint regarding
+                    <t t-out="object.type.name or object.sudo().type.name"/>
+                    and
+                    has been thoroughly investigated and complaint number is
+                    <strong>
+                        <t t-out="object.complaint_number or ''">TC000001</t>
+                    </strong>
+                    successfully resolved. We have taken appropriate measures to address the issue and ensure your
+                    satisfaction.
+                    <br/>
+                    <br/>
+                    <t t-if="env.context.get('action_plan')">
+                        <strong>here's the action plan for complaint :</strong>
+                        <br/>
+                        <t t-out="env.context.get('action_plan')"/>
+                        <br/>
+                    </t>
+                    We understand the importance of maintaining a comfortable and safe living environment for all our
+                    tenants, and we appreciate your patience and cooperation throughout this process.
+                    <br/>
+                    <br/>
+                    If you have any further concerns or require assistance in the future, please don't hesitate to reach
+                    out to us. We are here to help.
+                    <br/>
+                    <br/>
+                    Thank you for bringing this matter to our attention.
+                    <br/>
+                    <br/>
+                    Best regards,
+                    <t t-out="object.user_id.name or object.sudo().user_id.name"><br/>Tenant Complaint
+                    </t>
+                    team
+                </div>
+            </field>
+        </record>
+
+        <!-- Tenant Complaint Dropped Format -->
+        <record id="closed_tenant_complaint_email_template" model="mail.template">
+            <field name="name">Tenant: Complaint Dropped</field>
+            <field name="model_id" ref="RealEstateX.model_tenants_complaints"/>
+            <field name="subject">{{ object.name }}</field>
+            <field name="email_from">{{ (object.team_id.alias_email_from or object.company_id.email_formatted or
+                object.user_id.email_formatted or user.email_formatted) }}
+            </field>
+            <field name="email_to">{{ (object.email) }}</field>
+            <field name="description">Send customers a email to notify them that their tenant ticket has
+                been dropped.
+            </field>
+            <field name="body_html" type="html">
+                <div>
+                    Dear <t t-out="object.name or object.sudo().name or 'Madam/Sir'">
+                    Madam/Sir</t>,
+                    <br/>
+                    <br/>
+                    We have to drop your complaint number
+                    <strong>
+                        <t t-out="object.complaint_number or ''">TC000001</t>
+                    </strong>
+                    due to
+                    <strong>
+                        <t t-out="env.context.get('reason', False)"/>
+                    </strong>
+                    We understand that circumstances may have
+                    changed or that the issue has been resolved to your satisfaction.
+                    <br/>
+                    <br/>
+                    Rest assured that we are committed to maintaining a positive living environment for all our tenants.
+                    If you have any further concerns in the future or if there is anything else we can assist you with,
+                    please do not hesitate to reach out to us.
+                    <br/>
+                    <br/>
+                    Thank you for your understanding and cooperation in this matter. We value your feedback and are
+                    always here to support you.
+                    <br/>
+                    <br/>
+                    Best regards,
+                    <br/>
+                    <t t-out="object.user_id.name or object.sudo().user_id.name"><br/>Tenant Complaint
+                    </t>
+                    team
+                </div>
+            </field>
+        </record>
+
+        <!-- Tenant Complaint Question Answer Format -->
+        <record id="question_answer_tenant_complaint_email_template" model="mail.template">
+            <field name="name">Tenant: Complaint Closed</field>
+            <field name="model_id" ref="RealEstateX.model_tenants_complaints"/>
+            <field name="subject">{{ object.name }}</field>
+            <field name="email_from">{{ (object.team_id.alias_email_from or object.company_id.email_formatted or
+                object.user_id.email_formatted or user.email_formatted) }}
+            </field>
+            <field name="email_to">{{ (object.email) }}</field>
+            <field name="description">Send customers a email to notify them that their tenant ticket has
+                been closed.
+            </field>
+            <field name="body_html" type="html">
+                <div>
+                    Dear <t t-out="object.name or object.sudo().name or 'Madam/Sir'">
+                    Madam/Sir</t>,
+                    <br/>
+                    <br/>
+                    Thank you for bringing your concerns to our attention. We take feedback from our tenants seriously,
+                    and we are committed to addressing any issues promptly to ensure your comfort and satisfaction.
+                    <br/>
+                    <br/>
+                    We have thoroughly investigated the matter you raised regarding
+                    <strong>
+                        <t t-out="object.complaint_number or ''">TC000001</t>
+                    </strong>
+                    .
+                    After careful consideration, here is our response:
+                    <br/>
+                    <br/>
+                    <strong>
+                        <t t-out="env.context.get('answer', False)"/>
+                    </strong>
+                    <br/>
+                    <br/>
+                    Additionally, we would like to express our sincere apologies for any inconvenience this may have
+                    caused you. We strive to maintain a high standard of service for all our tenants, and we appreciate
+                    your patience and understanding as we work to resolve this issue.
+                    <br/>
+                    <br/>
+                    Thank you for choosing to be a part of our community.
+                    <br/>
+                    <br/>
+                    Best regards,
+                    <t t-out="object.user_id.name or object.sudo().user_id.name"><br/>Tenant Complaint
+                    </t>
+                    team
+                </div>
+            </field>
+        </record>
+    </data>
+</odoo>

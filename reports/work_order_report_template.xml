@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tenant Complaint Report Template -->
+    <template id="report_tenant_complaint">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="oe_structure"></div>
+                        <h2 class="mt-4">
+                            <span>Work Order #</span>
+                            <span t-field="o.complaint_number">TC/000001</span>
+                        </h2>
+                        <div class="row mt-4 mb-2" id="informations">
+                            <table class="table mt-4">
+                                <tr>
+                                    <td>
+                                        <strong>
+                                            <span>Name Of Tenant</span>
+                                        </strong>
+                                    </td>
+                                    <td>
+                                        <span t-field="o.name"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>
+                                            <span>Assigned To</span>
+                                        </strong>
+                                    </td>
+                                    <td>
+                                        <span t-field="o.user_id.name"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>
+                                            <span>Address</span>
+                                        </strong>
+                                    </td>
+                                    <td>
+                                        <span t-field="o.address"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>
+                                            <span>Date</span>
+                                        </strong>
+                                    </td>
+                                    <td>
+                                        <span t-field="o.create_date"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>
+                                            <span>Email</span>
+                                        </strong>
+                                    </td>
+                                    <td>
+                                        <span t-field="o.email"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>
+                                            <span>Problem Description</span>
+                                        </strong>
+                                    </td>
+                                    <td>
+                                        <span t-field="o.description"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="row mt-2 mb-2">
+                            <div class="col">
+                                <strong>
+                                    <span>Action Plan :</span>
+                                </strong>
+                                <span t-field="o.action_plan"></span>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

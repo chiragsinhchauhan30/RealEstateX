@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Paper Format DIN5008 (Ref by European A4 for DIN5008 Type A)-->
+    <record id="paperformat_DIN5008" model="report.paperformat">
+        <field name="name">DIN5008</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">27</field>
+        <field name="margin_bottom">40</field>
+        <field name="margin_left">20</field>
+        <field name="margin_right">10</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">27</field>
+        <field name="dpi">70</field>
+    </record>
+
+    <!-- Tenant Complaint Report Action -->
+    <record id="action_report_tenant_complaint" model="ir.actions.report">
+        <field name="name">Work Order</field>
+        <field name="model">tenants.complaints</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">RealEstateX.report_tenant_complaint</field>
+        <field name="report_file">RealEstateX.report_tenant_complaint</field>
+        <field name="binding_model_id" ref="model_tenants_complaints"/>
+        <field name="paperformat_id" ref="RealEstateX.paperformat_DIN5008"/>
+        <field name="binding_type">report</field>
+    </record>
+
+</odoo>
